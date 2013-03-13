@@ -1,0 +1,24 @@
+---
+abstract: 'Pod::Checker verifies POD documentation contents for compliance with the POD format specifications'
+author:
+  - 'Marek Rouchal <marekr@cpan.org>'
+build_requires:
+  ExtUtils::MakeMaker: 0
+configure_requires:
+  ExtUtils::MakeMaker: 0
+dynamic_config: 0
+generated_by: 'ExtUtils::MakeMaker version 6.59, CPAN::Meta::Converter version 2.112150'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Pod-Checker
+no_index:
+  directory:
+    - t
+    - inc
+requires:
+  Cwd: 0
+  File::Basename: 0
+  Test::More: 0.6
+version: 1.60

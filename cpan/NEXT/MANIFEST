@@ -1,0 +1,18 @@
+Changes
+demo/demo.pl
+demo/demo_actual.pl
+demo/demo_diamond.pl
+demo/demo_unseen.pl
+demo/demo_unseen_actual.pl
+lib/NEXT.pm
+Makefile.PL
+MANIFEST			This list of files
+MANIFEST.SKIP
+README
+t/actual.t
+t/actuns.t
+t/dynamically_scoped_regex_vars.t
+t/next.t
+t/stringify.t
+t/unseen.t
+META.yml                                 Module meta-data (added by MakeMaker)

@@ -1,0 +1,10 @@
+ 27-Jan-2013           Marek Rouchal                        <marekr@cpan.org>
+ -----------------------------------------------------------------------------
+ Version 1.60
+ + preparation of changing this module to use Pod::Simple
+   refactored the Pod-Parser distribution and moved all things Pod::Checker
+   to this new distribution package
+ + CPAN RT#79535: Pod::Checker synopsis for podchecker is opposite
+   corrected the POD synopsis
+ + factored this distribution out of Pod-Parser-1.51
+

@@ -1,0 +1,18 @@
+Artistic
+Changes
+Copying
+LICENSE
+Makefile.PL
+MANIFEST
+MANIFEST.SKIP
+Socket.pm
+Socket.xs
+t/getaddrinfo.t
+t/getnameinfo.t
+t/ip_mreq.t
+t/ipv6_mreq.t
+t/sockaddr.t
+t/Socket.t
+t/socketpair.t
+typemap
+META.yml                                 Module meta-data (added by MakeMaker)

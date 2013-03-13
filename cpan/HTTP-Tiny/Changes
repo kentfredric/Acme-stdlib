@@ -1,0 +1,270 @@
+Release notes for HTTP-Tiny
+
+0.028     2013-03-05 14:11:57 America/New_York
+
+  [SUPPORT]
+
+  - Fix repository/issue links to reflect proper repo name
+
+0.027     2013-03-05 12:02:58 America/New_York
+
+  [SUPPORT]
+
+  - Changed metadata to point to the chansen github repository
+    for code and issues
+
+  [DOCUMENTATION]
+
+  - Added hyperlink for HTTP::CookieJar
+
+0.026     2013-03-04 22:53:39 America/New_York
+
+  [ADDED]
+
+  - Added cookie support if an HTTP::CookieJar object is provided in the
+    'cookie_jar' attribute [Edward Zborowski]
+
+0.025     2012-12-26 12:09:43 America/New_York
+
+  [ADDED]
+
+  - Agent string appends default if it ends in a space, just like LWP
+    [Chris Weyl]
+
+0.024     2012-10-09 20:44:53 America/New_York
+
+  [ADDED]
+
+  - SSL connections now auto-retry I/O after SSL renegotiation [Alan
+    Gardner]
+
+  [FIXED]
+
+  - User-specified CA bundles take precedence over Mozilla::CA [Alan
+    Gardner]
+
+  [PREREQS]
+
+  - SSL support now requires Net::SSLeay 1.49 or greater to support
+    auto-retry [Mike Doherty]
+
+  - Downgraded IO::Socket::SSL and related prereqs to 'suggests' again
+
+0.023     2012-09-19 09:55:46 America/New_York
+
+  [PREREQS]
+
+  - IO::Socket::SSL and related prereqs changed to 'required' for dev
+    release to get better failure diagnostics from CPAN Testers
+
+  [TESTING]
+
+  - Skip live SSL testing unless IO::Socket::SSL 1.56+ installed
+
+0.022     2012-06-01 23:31:40 America/New_York
+
+  [ADDED]
+
+  - Supports local_address option to set local socket interface
+    [Chris Nehren, David Golden]
+
+0.021     2012-05-15 22:38:57 America/New_York
+
+  [TESTING]
+
+  - Skip live SSL testing if $ENV{http_proxy} is set
+
+0.020     2012-05-14 15:24:37 America/New_York
+
+  [TESTING]
+
+  - Capture prerequisite versions under AUTOMATED_TESTING to help
+    chase down some failures from CPAN Testers
+
+0.019     2012-05-14 07:14:00 America/New_York
+
+  [ADDED]
+
+  - Require IO::Socket::SSL 1.56 (which added SSL_hostname support) when
+    doing HTTPS.  [Mike Doherty]
+
+  [TESTING]
+
+  - Provide better diagnostic output in t/210_live_ssl.t [Mike
+    Doherty]
+
+0.018     2012-04-18 09:39:50 America/New_York
+
+  [ADDED]
+
+  - Add verify_SSL option to do more secure SSL operations, incl.
+    attempting to validate against a CA bundle (Mozilla::CA
+    recommended, but will attempt to find some OS bundles). Also
+    add SSL_opts, which passes through IO::Socket::SSL's SSL_*
+    options to control SSL verification. (GH #6, #9) [Mike Doherty]
+
+
+  - Reponse hashref includes final URL (including any redirections)
+    [Lukas Eklund]
+
+0.017     2012-02-22 21:57:37 EST5EDT
+
+  [DOCUMENTATION]
+
+  - Clarified how max_size exceptions work [rt.cpan.org #75142]
+
+  - Clarify that 2XX is success for most methods (except mirror
+    where 304 is also success) [rt.cpan.org #75141]
+
+0.016     2011-10-26 23:05:50 America/New_York
+
+  [BUG FIXES]
+
+  - Fixed Perl 5.6 compatibility by emulating utf8::encode [David Golden]
+
+0.015     2011-10-26 16:42:26 America/New_York
+
+  [BUG FIXES]
+
+  - Make sure PERL_UNICODE doesn't affect PUT test data [Tony Cook]
+
+  [DOCUMENTATION]
+
+  - Fixed typo
+
+0.014     2011-10-20 13:54:13 America/New_York
+
+  [NEW FEATURES]
+
+  - Adds additional shorthand methods for all common HTTP verbs
+    (HEAD, PUT, POST, DELETE) [David Golden]
+
+  - post_form() method for POST-ing x-www-form-urlencoded data
+    [David Golden]
+
+  - www_form_urlencode() utility method [David Golden]
+
+0.013     2011-07-17 23:14:22 America/New_York
+
+  [NEW FEATURES]
+
+  - $ENV{http_proxy} support added [Claes Jakobsson]
+
+  [OTHER]
+
+  - Internal/private errors converted from "croak" to "die" as internal
+    errors are caught by "eval"
+
+0.012     2011-03-31 15:48:02 America/New_York
+
+  [BUG FIXES]
+
+  - mirror() now uses binmode during output (RT #67118) [Serguei Trouchelle]
+
+  [DOCUMENTATION]
+
+  - noted that SSL certificates are not verified against CA's
+    (RT #66907)
+
+0.011     2011-03-19 20:48:39 America/New_York
+
+  [BUG FIXES]
+
+  - Made t/000_load.t less verbose under harness (RT#65507) [Dave Mitchell]
+
+  - Removed 'Errno' as an explicit prefix (it is a core module, but not
+    indexed by PAUSE, which might confuse some installers)
+
+0.010     2011-02-04 02:45:31 EST5EDT
+
+  [BUG FIXES]
+
+  - Fixed test errors on VMS (RT#65430) [Craig Berry]
+
+0.009     2011-01-17 16:29:22 EST5EDT
+
+  - Added workaround for IO::Socket::SSL certificate verification bug
+
+  - Minor documentation improvements
+
+  - POST example added to the eg/ directory in the distribution tarball
+
+0.008     2011-01-14 06:34:55 EST5EDT
+
+  - Added support for direct 'https' connections if IO::Socket::SSL
+    is installed
+
+  - Added support for a callback to provide trailing headers for
+    chunked transfer encoding
+
+  - Data callbacks receive the response hashref as a second argument
+    for greater flexibility
+
+  - Additional limitations documented
+
+0.007     2011-01-12 04:56:16 EST5EDT
+
+  - Added support for redirecting 303 and 307 response codes
+
+  - Retry (once) a request that fails due to a closed socket
+    (per RFC2616 8.1.4)
+
+  - Automatically sets request Content-Type to 'application/octet-stream'
+    if there is content the user has not defined its type
+
+  - Trailing headers from chunked transfer encoding are now merged
+    into the response headers instead of ignored
+
+  - Improved handling of malformed or unsupported HTTP protocols
+
+  - Expanded http:///.../ as http://localhost/.../ and set Host header
+
+  - Documented that URL's must be escaped/encoded
+
+  - Documented that the headers hash option may contain an array reference
+    to output multiple values of the same header field
+
+  - Improved documentation of limitations
+
+  - Added numerous new tests to ensure compliance with the HTTP/1.1 spec
+
+0.006     2011-01-10 07:28:11 EST5EDT
+
+  - Transfer-Encodings are case insensitive
+
+  - Add additional test for proper behavior when both Content-Length
+    and Transfer-Encoding headers are received
+
+0.005     2011-01-08 06:32:05 EST5EDT
+
+  - Fixed bug getting content for servers which do not sent Content-Length
+
+  - Add test coverage for get(), mirror() and request()
+
+  - Add test coverage for requests with static and generated content
+
+0.004     2010-12-15 22:53:59 EST5EDT
+
+  - Renamed 'ok' response field to 'success'
+
+  - Handle all required HTTP/1.1 date formats
+
+  - Documented how callbacks are supposed to work
+
+0.003     2010-12-15 12:30:42 EST5EDT
+
+  - Added 'ok' response field to simplify checking success
+
+  - Added a 'mirror' method mirror content to a file, but shortcut
+    if not modified
+
+0.002     2010-12-13 21:59:39 EST5EDT
+
+  - Added some initial documentation
+
+  - Skips utf8::* code on Perls older than 5.8
+
+0.001     2010-12-11 07:59:16 EST5EDT
+
+  - Initial CPAN release
+

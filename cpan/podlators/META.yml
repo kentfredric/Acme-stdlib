@@ -1,0 +1,24 @@
+--- #YAML:1.0
+name:               podlators
+version:            2.5.1
+abstract:           Convert POD data to various other formats
+author:
+    - Russ Allbery <rra@stanford.edu>
+license:            perl
+distribution_type:  module
+configure_requires:
+    ExtUtils::MakeMaker:  0
+build_requires:
+    ExtUtils::MakeMaker:  0
+requires:
+    Encode:       0
+    File::Spec:   0.8
+    Pod::Simple:  3.06
+no_index:
+    directory:
+        - t
+        - inc
+generated_by:       ExtUtils::MakeMaker version 6.57_05
+meta-spec:
+    url:      http://module-build.sourceforge.net/META-spec-v1.4.html
+    version:  1.4

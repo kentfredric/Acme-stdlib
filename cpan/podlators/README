@@ -1,0 +1,128 @@
+                          podlators version 2.5.1
+             (Format POD source into various output formats)
+
+              Maintained by Russ Allbery <rra@stanford.edu>
+
+  Copyright 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
+  2009, 2010, 2012, 2013 Russ Allbery <rra@stanford.edu>.  This program is
+  free software; you may redistribute it and/or modify it under the same
+  terms as Perl itself.
+
+  I welcome all bug reports and patches for this package (and in
+  particular, if you're looking for a project, see TODO).  However, please
+  be aware that I tend to be extremely busy and to get a lot of mail.
+  I'll save your mail and get to it as soon as I can, but depending on how
+  busy I am it may take me a couple of months.
+
+BLURB
+
+  podlators contains Pod::Man and Pod::Text modules which convert POD
+  input to *roff source output, suitable for man pages, or plain text.  It
+  also includes several subclasses of Pod::Text for formatted output to
+  terminals with various capabilities.  It is the source package for the
+  Pod::Man and Pod::Text modules included with Perl.
+
+DESCRIPTION
+
+  This package contains the replacement for pod2text and Pod::Text in
+  versions of Perl 5.005 and earlier.  It also contains Pod::Man and
+  pod2man, the replacement for pod2man found in Perl distributions prior
+  to 5.6.0.  The modules contained in it use Pod::Simple rather than doing
+  the POD parsing themselves, and are designed to be object-oriented and
+  to subclass.  As an example, three useful subclasses of Pod::Text are
+  also included: Pod::Text::Color, which uses ANSI color escape sequences
+  to highlight text, Pod::Text::Termcap, which determines the correct
+  control sequences to embolden and underline text from terminal termcap
+  information, and Pod::Text::Overstrike, which uses the backspacing
+  method of underlining and bold also used by the output of nroff.
+
+  Both Pod::Text and Pod::Man provide a variety of options for fine-tuning
+  their output.  Pod::Man also tries to massage input text where
+  appropriate to produce better output when run through nroff or troff,
+  such as distinguishing between different types of hyphens and using
+  slightly smaller case for acronyms.
+
+  A general parser utility module for L<> formatting code parsing is also
+  included, Pod::ParseLink.  This implements only the simple parse
+  described in perlpodspec.  It is no longer used by the modules here
+  (Pod::Simple has a separate implementation of the same concept), but is
+  included in case others find it useful.
+
+REQUIREMENTS
+
+  Both Pod::Man and Pod::Text are built on Pod::Simple, which handles the
+  basic POD parsing and character set conversion.  Pod::Simple 3.06 or
+  later is required (and Pod::Simple 3.07 is recommended).  It is
+  available from CPAN and part of Perl core as of 5.10.0.  Encode is also
+  required (included in Perl core since 5.8.0).
+
+  To use Pod::Text::Color, Term::ANSIColor is required.  It is available
+  from CPAN and part of Perl core as of 5.6.0.
+
+  PerlIO support is required for Pod::Text to set the output encoding to
+  match the input encoding (which it does unless the utf8 option is used).
+  Without this, the output will use Perl's internal encoding, which may be
+  surprising and may produce Perl warnings.
+
+  To run the test suite, Test::More is required.  It is available from
+  CPAN and part of Perl core as of 5.6.2.
+
+  The test suite includes a formatting and spelling check of all of the
+  POD documentation.  To check formatting, Test::Pod is required.  To
+  check spelling, Pod::Spell and either aspell or ispell with the american
+  dictionary are also required.  The user's path is searched for aspell or
+  ispell and aspell is preferred.  Spelling tests are disabled by default
+  since spelling dictionaries differ too much between systems.  To enable
+  those tests, set RRA_MAINTAINER_TESTS to a true value.
+
+INSTALLATION
+
+  WARNING: Installation of this package will replace the pod2text and
+  pod2man scripts that come with Perl, and for Perl 5.6.0 or later the
+  versions of Pod::Text and Pod::Man installed with Perl.  Make sure that
+  you have a version of this package as new as or newer than the modules
+  that come with Perl.  For older versions of Perl, pod2text and pod2man
+  will still be overwritten, but Pod::Text will not be, making many of the
+  options in pod2text not actually useable unless you overwrite the
+  version that comes with Perl with it (since Perl looks in its own
+  directories before it looks in site_perl).  Note also that the version
+  in this package attempts to be backwards-compatible but is not bug
+  compatible, and some things like the default wrap margin have changed.
+  The version contained in this package is the default version for Perl
+  5.5.560 or thereabouts and higher, but may be slightly newer depending
+  on how updates have been synchronized.
+
+  Follow the standard installation procedure for Perl modules, which is to
+  type the following commands:
+
+      perl Makefile.PL
+      make
+      make install
+
+  You'll probably need to do the "make install" as root.  This will also
+  install driver scripts named pod2text and pod2man; see their man pages
+  for more information.
+
+HOMEPAGE AND SOURCE REPOSITORY
+
+  The podlators web page at:
+
+      http://www.eyrie.org/~eagle/software/podlators/
+
+  will always have the current version of this package, the current
+  documentation, and pointers to any additional resources.
+
+  podlators is maintained using Git.  You can access the current source
+  by cloning the repository at:
+
+      git://git.eyrie.org/perl/podlators.git
+
+  or view the repository on the web at:
+
+      http://git.eyrie.org/?p=perl/podlators.git
+
+  You can file bug reports for this package in RT at:
+
+      https://rt.cpan.org/Public/Dist/Display.html?Name=podlators
+
+  or send me mail directly at rra@stanford.edu.

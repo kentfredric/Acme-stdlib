@@ -1,0 +1,24 @@
+ANSIColor.pm
+ChangeLog
+examples/generate-colors
+LICENSE
+Makefile.PL
+MANIFEST			This list of files
+README
+t/aliases-env.t
+t/aliases-func.t
+t/basic.t
+t/basic256.t
+t/critic.t
+t/data/perlcriticrc
+t/data/perltidyrc
+t/eval.t
+t/minimum-version.t
+t/pod-coverage.t
+t/pod-spelling.t
+t/pod.t
+t/strict.t
+t/stringify.t
+t/synopsis.t
+t/taint.t
+META.yml                                 Module meta-data (added by MakeMaker)

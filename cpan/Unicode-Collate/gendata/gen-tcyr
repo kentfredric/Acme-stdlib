@@ -1,0 +1,250 @@
+#!perl
+# gen-tcyr : auxiliary script to generate tests for cyrillic
+#
+# input files
+#
+#   ../data/be.txt
+#   ../data/bg.txt
+#   ../data/kk.txt
+#   ../data/mk.txt
+#   ../data/ru.txt
+#   ../data/sr.txt
+#   ../data/uk.txt
+#
+# output files
+#
+#   loc_be.t
+#   loc_bg.t (remaining \x{...} should be fixed)
+#   loc_bscy.t
+#   loc_cyrl.t
+#   loc_kk.t (remaining \x{...} should be fixed)
+#   loc_mk.t
+#   loc_ru.t
+#   loc_sr.t
+#   loc_uk.t (remaining \x{...} should be fixed)
+#
+
+use strict;
+use warnings;
+use File::Spec;
+require 'gen-head'; # for testcount() and testhead()
+
+my @Cyrill = qw(bscy be bg cyrl kk mk ru sr uk);
+my %Alias  = qw(bscy sr);
+my $NoSupp = 'NoSuppress'; # for loc_cyrl.t
+
+# convert 'AAA BBB' to '\x{AAA}\x{BBB}'
+sub xstr ($) {
+    my $s = shift;
+    my $j = join '', map "\\x{$_}", split ' ', $s;
+    $j =~ s/(\{)0+/$1/g;
+    return $j;
+}
+
+my @data;
+while (<DATA>) {
+    last if /^__END__$/;
+    chomp;
+    push @data, $_;
+}
+
+for my $loc (@Cyrill) {
+    my @source;
+    if ($loc ne 'cyrl') {
+	my $txt = $Alias{$loc} || $loc;
+	my $d = File::Spec->updir();
+	my $f = File::Spec->catfile($d, 'data', "$txt.txt");
+	open my $src, "<$f" or die $f;
+	@source = <$src>;
+	close $src or die "close $f";
+    }
+
+    my $has_suppress = 0;
+    my(@tailored, %tailoring, %suppressed);
+    for (@source) {
+	chomp;
+	next if /^\s*$/;
+	next if /^#/;
+	next if /^locale_version/;
+	$has_suppress = 1 if /suppress/;
+	if (/^([0-9A-Fa-f]+);<([0-9A-Fa-f]+)>([+-])1$/) {
+	    $tailoring{$1} = "$3$2";
+	    push @tailored, $1;
+	} elsif ($has_suppress) {
+	    $suppressed{$_} = 1 for split;
+	} else {
+	    die "$_ in $loc";
+	}
+    }
+
+    my @eq;
+    for (@data) {
+	my $line = $_;
+	my $comp = /\A([0-9A-Fa-f]+);/ ? $1 : 'none';
+	my $base = /;<([0-9A-Fa-f]+)>/ ? $1 : 'none';
+	my $notcont = /# not contraction/;
+
+	$line .= ' # tailored'       if $tailoring{$comp};
+	$line .= ' # not suppressed' if !$notcont && !$suppressed{$base};
+	push @eq, ($line =~ /#/ ? '#' : '')."$line\n";
+    }
+
+    if (0) {
+	my $f = "$loc.eq";
+	open my $eqf, ">$f" or die $f;
+	binmode $eqf;
+	print $eqf @eq;
+	close $eqf or die "close $f";
+    }
+
+    my $obj = "\$obj\u$loc";
+    my($t0c,$t0,$t1,$t2c,$t2,$t3c,$t3,$t4,$t4c);
+
+    my $count_tailored = 0;
+    for my $u (@tailored) {
+	my $s = xstr($u);
+	++$count_tailored;
+
+	my($xgt, $xlt);
+	my $compare = $tailoring{$u};
+	$compare =~ s/([+-])//;
+	if ($1 eq '+') {
+	   $xgt = xstr($compare);
+	   $xlt = '\x{...}';
+	} else {
+	   $xgt = '\x{...}';
+	   $xlt = xstr($compare);
+	}
+
+	if ($count_tailored % 2) {
+	    $t0c .= qq|ok($obj->gt("$s", "$xgt"));\n|;
+	    $t0c .= qq|ok($obj->lt("$s", "$xlt"));\n|;
+	    $t2c .= qq|ok($obj->eq("$s"|;
+	    $t3c .= qq|ok($obj->lt("$s"|;
+	    $t4c .= qq|ok($obj->gt("$s"|;
+	} else {
+	    $t2c .= qq|, "$s"));\n|;
+	    $t3c .= qq|, "$s"));\n|;
+	    $t4c .= qq|, "$s"));\n|;
+	}
+    }
+
+    for (@eq) {
+	chomp;
+	s/^#//;
+	my $com = s/(\s*#.*)// ? $1 : '';
+
+	s/></ /g;
+	tr/<>/ /d;
+	my($fr,$to) = split /;/, $_;
+	my $xfr = xstr($fr);
+	my $xto = xstr($to);
+	if ($com eq '' || $com eq ' # not contraction') {
+	    $xto =~ s/(\})(\\x\{)/$1\$i$2/;
+	    $t4 .= qq|  ok($obj->eq("$xfr", "$xto"));$com\n|;
+	    $xto =~ s/\$i.*//; # remove combining characters
+	    $t1 .= qq|ok($obj->eq("$xfr", "$xto"));$com\n|;
+	    $t2 .= qq|ok($obj->gt("$xfr", "$xto"));$com\n|;
+	} else {
+	    my $c = $com eq ' # not suppressed' ? $com : '';
+	    $t3 .= qq|ok($obj->eq("$xfr", "$xto"));$c\n|;
+	    $xto =~ s/(\}).*/$1/; # remove combining characters
+	    $t0 .= qq|ok($obj->gt("$xfr", "$xto"));$c\n| if $c;
+	}
+    }
+
+    my $test;
+    my $ok = 2;
+    $test .= "$obj->change(level => 1);\n\n";
+    $test .= testcount(\$ok, $t0c) if $t0c;
+    $test .= testcount(\$ok, $t0)  if $t0;
+    $test .= testcount(\$ok, $t1)  if $t1;
+
+    $test .= "$obj->change(level => 2);\n\n";
+    $test .= testcount(\$ok, $t2c) if $t2c;
+    $test .= testcount(\$ok, $t2)  if $t2;
+
+    $test .= "$obj->change(level => 3);\n\n";
+    $test .= testcount(\$ok, $t3c) if $t3c;
+    $test .= testcount(\$ok, $t3)  if $t3;
+
+    $test .= qq|for my \$i ("", "\\0") |;
+    $test .= testcount(\$ok, $t4, 2);
+
+    $test .= "$obj->change(upper_before_lower => 1);\n\n" if $t4c;
+    $test .= testcount(\$ok, $t4c) if $t4c;
+
+    {
+	chomp $test;
+	my $f = "loc_$loc.t";
+	open my $dst, ">$f" or die $f;
+	binmode $dst;
+	my $text = testhead($loc, $ok).$test;
+
+	$text =~ s/'CYRL'/'$NoSupp'/;
+	$text =~ s/'cyrl'/'default'/;
+	$text =~ s/objCyrl/obj$NoSupp/g;
+
+	$text =~ s/'BSCY'/'BS-CYRL'/;
+	$text =~ s/'bscy'/'bs_Cyrl'/;
+	$text =~ s/objBscy/objBsCyrl/g;
+
+	print $dst $text;
+	close $dst or die "close $f";
+    }
+}
+
+__DATA__
+04D1;<0430><0306>
+04D0;<0410><0306>
+04D3;<0430><0308>
+04D2;<0410><0308>
+04DB;<04D9><0308>
+04DA;<04D8><0308>
+0453;<0433><0301>
+0403;<0413><0301>
+0450;<0435><0300> # not contraction
+0400;<0415><0300> # not contraction
+0451;<0435><0308> # not contraction
+0401;<0415><0308> # not contraction
+04D7;<0435><0306>
+04D6;<0415><0306>
+04C2;<0436><0306> # not contraction
+04C1;<0416><0306> # not contraction
+04DD;<0436><0308>
+04DC;<0416><0308>
+04DF;<0437><0308>
+04DE;<0417><0308>
+045D;<0438><0300> # not contraction
+040D;<0418><0300> # not contraction
+04E3;<0438><0304> # not contraction
+04E2;<0418><0304> # not contraction
+04E5;<0438><0308>
+04E4;<0418><0308>
+0457;<0456><0308>
+0407;<0406><0308>
+0439;<0438><0306>
+0419;<0418><0306>
+04E7;<043E><0308>
+04E6;<041E><0308>
+04EB;<04E9><0308>
+04EA;<04E8><0308>
+045C;<043A><0301>
+040C;<041A><0301>
+04EF;<0443><0304> # not contraction
+04EE;<0423><0304> # not contraction
+045E;<0443><0306>
+040E;<0423><0306>
+04F1;<0443><0308>
+04F0;<0423><0308>
+04F3;<0443><030B>
+04F2;<0423><030B>
+04F5;<0447><0308>
+04F4;<0427><0308>
+04F9;<044B><0308>
+04F8;<042B><0308>
+04ED;<044D><0308>
+04EC;<042D><0308>
+0477;<0475><030F>
+0476;<0474><030F>
+__END__

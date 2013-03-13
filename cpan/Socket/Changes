@@ -1,0 +1,103 @@
+Revision history for Socket
+
+2013/01/18
+2.009   CHANGES:
+         * Fix building in core by skipping check_for() as it doesn't work
+           there (RT82760)
+
+2012/12/27
+2.008   CHANGES:
+         * Fix uninitialised memory read (RT82119)
+
+2012/12/16
+2.007   CHANGES:
+         * Test %Config keys for definedness, not mere existence (RT79854)
+         * Fix missing argument in sprintf in Socket.xs (from perl.git
+           5d6dfea82e1c4b6, RT82007)
+
+2012/08/19
+2.006   CHANGES:
+         * Fix AF_INET6 test skip counts in t/sockaddr.t (RT79071)
+         * Define mPUSHs() as it's lacking before 5.10.1
+
+2012/08/16
+2.005   CHANGES:
+         * Have unpack_sockaddr_in{,6} return just the IP address in scalar
+           context
+         * Guard against incorrect length scalars being passed in to inet_ntop
+           (RT78890)
+
+2012/08/15
+2.004   BUGFIXES:
+         * Put skip() arguments the right way around in t/ip_mreq.t (RT78986)
+
+2012/08/15
+ ** Do not use; see 2.004 **
+2.003   CHANGES:
+         * Added IPV6_JOIN_GROUP and IPV6_LEAVE_GROUP
+         * Added constants and functions required for IP multicast source
+           group membership
+         * Added TCP_NOPUSH,NOOPT,CONNECTIONTIMEOUT,INIT_CWND,SACK_ENABLE
+           (RT78626)
+
+2012/06/06
+2.002   CHANGES:
+         * Wrap Linux's SOCK_NONBLOCK and SOCK_CLOEXEC constants
+         * Added sockopt constants and structure handling functions for IPv4
+           multicast (also with thanks to Christian Walde for help on MSWin32)
+
+2012/03/27
+2.001   CHANGES:
+         * Apply (modified) patch from ppisar@redhat.com to fix memory
+           addressing bug with Zero() - RT76067
+         * Document that inet_pton() doesn't work on hostnames, only textual
+           addresses - RT76010
+         * Ignore any existing-but-undefined hints hash members to
+           getaddrinfo()
+
+2012/03/10
+2.000   CHANGES:
+         * Apply (modified) patch from rurban to fix memory overflow bug with
+           sockaddr_un() - RT75623
+         * Increase to three-digit version suffix in new major version
+
+2012/02/21
+1.99    CHANGES:
+         * Better implementation of inet_pton() that sets correct size (RT 75074)
+         * Added SO_DOMAIN
+         * More robust unit tests of address-mangling functions
+
+1.98    CHANGES:
+         * Detect presence of sockaddr_in6 and ipv6_mreq; conditionally build
+           pack/unpack functions on this
+         * Back-compatibility improvements for older perls, back as far as
+           5.6.1 (thanks Zefram)
+         * Fix for picky compilers or platforms on which size_t doesn't
+           printf() correctly by %d
+         * Suppress some harmless compile-time warnings about unused variables
+
+1.97    CHANGES:
+         * Rewritten Makefile.PL configure-time logic to use only core's
+           ExtUtils::CBuilder rather than CPAN's ExtUtils::CChecker
+         * Fix implementation of synthesized newSVpvn_flags() to also work on
+           threaded 5.10.0
+         * Set INSTALLDIRS=perl on perl before 5.11; required as it's
+           replacing a core module
+
+1.96    CHANGES:
+         * Fix Socket.t to use ok() instead of is() where required - RT73039
+         * Complete rewrite of module docs; list all the constants and
+           functions, updated SYNOPSIS
+         * Added convenient Exporter tag :addrinfo for all the gai/gni-related
+           symbols
+         * Provide static synthesized newSVpvn_flags() replacement for older
+           Perls
+         * Implement getnameinfo() NIx_NOHOST and NIx_NOSERV extension flags
+
+1.95    CHANGES:
+         * Implement the remaining AI_*, EAI_* and NI_* constants from
+           Socket::GetAddrInfo
+         * Declare configure-time dependency on ExtUtils::Constants 0.23 for
+           when building out of core
+         * Initial attempt at dual-life extraction from bleadperl
+

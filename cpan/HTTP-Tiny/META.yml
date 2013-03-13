@@ -1,0 +1,69 @@
+---
+abstract: 'A small, simple, correct HTTP/1.1 client'
+author:
+  - 'Christian Hansen <chansen@cpan.org>'
+  - 'David Golden <dagolden@cpan.org>'
+build_requires:
+  Data::Dumper: 0
+  Exporter: 0
+  ExtUtils::MakeMaker: 0
+  File::Basename: 0
+  File::Find: 0
+  File::Spec: 0
+  File::Spec::Functions: 0
+  File::Temp: 0
+  IO::Dir: 0
+  IO::File: 0
+  IO::Socket::INET: 0
+  IPC::Cmd: 0
+  List::Util: 0
+  Test::More: 0.96
+  open: 0
+configure_requires:
+  ExtUtils::MakeMaker: 6.30
+dynamic_config: 0
+generated_by: 'Dist::Zilla version 4.300030, CPAN::Meta::Converter version 2.120921'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: HTTP-Tiny
+no_index:
+  directory:
+    - t
+    - xt
+    - examples
+    - corpus
+  package:
+    - DB
+provides:
+  HTTP::Tiny:
+    file: lib/HTTP/Tiny.pm
+    version: 0.028
+requires:
+  Carp: 0
+  IO::Socket: 0
+  Time::Local: 0
+  bytes: 0
+  perl: 5.006
+  strict: 0
+  warnings: 0
+resources:
+  bugtracker: https://github.com/chansen/p5-http-tiny/issues
+  homepage: https://metacpan.org/release/HTTP-Tiny
+  repository: git://github.com/chansen/p5-http-tiny.git
+version: 0.028
+x_contributors:
+  - 'Alan Gardner <gardner@pythian.com>'
+  - 'Alessandro Ghedini <al3xbio@gmail.com>'
+  - 'Chris Nehren <apeiron@cpan.org>'
+  - 'Chris Weyl <cweyl@alumni.drew.edu>'
+  - 'Claes Jakobsson <claes@surfar.nu>'
+  - 'Craig Berry <cberry@cpan.org>'
+  - 'David Mitchell <davem@iabyn.com>'
+  - 'Edward Zborowski <ed@rubensteintech.com>'
+  - 'Jess Robinson <castaway@desert-island.me.uk>'
+  - 'Lukas Eklund <leklund@gmail.com>'
+  - 'Mike Doherty <doherty@cpan.org>'
+  - 'Serguei Trouchelle <stro@cpan.org>'
+  - 'Tony Cook <tony@develop-help.com>'

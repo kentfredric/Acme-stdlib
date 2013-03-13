@@ -1,0 +1,15 @@
+1.61 (marekr)
+- fix empty META.yml (CPAN RT#83118: META.yml is empty)
+- update outdated test expected data (CPAN RT#83111: fails test)
+
+1.60 (marekr)
+- moved POD behind __END__ for slighlty quicker loading
+- CPAN RT#81387: 2 suggestions for module Pod::Usage
+  added example of how to use FindBin to locate the script;
+  added $Pod::Usage::Formatter to allow a different base class
+- CPAN RT#75598: [PATCH] Don't use perldoc if it is missing
+  implemented as suggested in the RT ticket
+- factored Pod::Usageout of the Pod-Parser distribution into a separate one,
+  in order to prepare the rewrite based upon Pod::Simple
+- thanks to rjbs for driving this
+
